@@ -7,5 +7,15 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data # allows docker to store DB data outside docker to the file system
+  mongodb:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root123
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/var/lib/mongodb/data
 volumes:
   pgdata:
+  mongodata:
