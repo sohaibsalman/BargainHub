@@ -20,6 +20,10 @@ namespace SearchService.Consumers
             Console.WriteLine("--> Consuming auction created: " + context.Message.Id);
 
             Item item = _mapper.Map<Item>(context.Message);
+
+            if (item.AuctionEnd < DateTime.UtcNow)
+                throw new ArgumentException("Auction end date cannot be in the past");
+            
             await item.SaveAsync();
         }
     }
