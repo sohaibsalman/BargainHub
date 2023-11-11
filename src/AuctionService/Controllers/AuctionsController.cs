@@ -83,9 +83,10 @@ public class AuctionsController : ControllerBase
         auction.Item.Mileage = auctionDto.Mileage ?? auction.Item.Mileage;
         auction.Item.Year = auctionDto.Year ?? auction.Item.Year;
 
-        bool result = await _context.SaveChangesAsync() > 0;
-
-        if (!result) return BadRequest("Could not save changes to Db");
+        AuctionUpdated updatedAuction = _mapper.Map<AuctionUpdated>(auction.Item);
+        await _publishEndpoint.Publish(updatedAuction);
+        
+        await _context.SaveChangesAsync();
         return Ok();
     }
 
@@ -99,6 +100,7 @@ public class AuctionsController : ControllerBase
         if (auction is null) return NotFound();
 
         _context.Auctions.Remove(auction);
+        await _publishEndpoint.Publish(new AuctionDeleted { Id = id.ToString() });
         bool result = await _context.SaveChangesAsync() > 0;
 
         if (!result) return BadRequest("Could not save changes to Db");
