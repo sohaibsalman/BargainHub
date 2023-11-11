@@ -1,12 +1,24 @@
-using MongoDB.Driver;
-using MongoDB.Entities;
+using MassTransit;
+using SearchService.Consumers;
 using SearchService.Data;
-using SearchService.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddMassTransit(x =>
+{
+    // Add all the consumers falling in the namespace of AuctionCreatedConsumer class
+    x.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
+    
+    x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
+    
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 
 var app = builder.Build();
