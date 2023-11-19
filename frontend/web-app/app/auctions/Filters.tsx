@@ -11,14 +11,14 @@ export default function Filters() {
   return (
     <div className='flex justify-between items-center mb-4'>
       <div>
-        <span className='uppercase text-sm text-gray-500 mr-2'>Page Size</span>
+        <span className='uppercase text-sm text-gray-500 mr-2 font-semibold'>Page Size</span>
         <Button.Group>
           {pageSizeButtons.map((value, index) => (
             <Button
               key={index}
               color={`${pageSize === value ? 'red' : 'gray'}`}
               onClick={() => setParams({pageSize: value})}
-              className='focus:ring-0'
+              className='focus:ring-0 font-semibold'
               >
               {value}
             </Button>
