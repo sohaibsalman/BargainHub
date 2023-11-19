@@ -12,10 +12,12 @@ import { useParamsStore } from '@/hooks/useParamsStore';
 
 export default function Listings() {
   const [data, setData] = useState<PagedResult<Auction[]>>();
-  const params = useParamsStore(state => ({
-    pageNumber: state.pageNumber,
-    pageSize: state.pageSize,
-    searchTerm: state.searchTerm
+  const params = useParamsStore(store => ({
+    pageNumber: store.pageNumber,
+    pageSize: store.pageSize,
+    searchTerm: store.searchTerm,
+    orderBy: store.orderBy,
+    filterBy: store.filterBy
   }), shallow)
   const setParams = useParamsStore(state => state.setParams);
   const url = qs.stringifyUrl({url: '', query: params});
