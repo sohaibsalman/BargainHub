@@ -9,6 +9,7 @@ import AppPagination from '../components/AppPagination';
 import Filters from './Filters';
 import { getData } from '../actions/auctionActions';
 import { useParamsStore } from '@/hooks/useParamsStore';
+import EmptyFilter from '../components/EmptyFilter';
 
 export default function Listings() {
   const [data, setData] = useState<PagedResult<Auction[]>>();
@@ -20,7 +21,7 @@ export default function Listings() {
     filterBy: store.filterBy
   }), shallow)
   const setParams = useParamsStore(state => state.setParams);
-  const url = qs.stringifyUrl({url: '', query: params});
+  const url = qs.stringifyUrl({ url: '', query: params });
 
   useEffect(() => {
     getData(url).then(response => {
@@ -33,17 +34,21 @@ export default function Listings() {
   return (
     <>
       <Filters />
-      <div className='grid grid-cols-4 gap-6'>
-        {data.results.map((auction) => (
-          <AuctionCard auction={auction} key={auction.id} />
-        ))}
-      </div>
-      <div className='flex justify-center mt-5'>
-        <AppPagination
-          currentPage={params.pageNumber}
-          pageCount={data.pageCount}
-          onPageChange={(page) => setParams({pageNumber: page})} />
-      </div>
+      {data.results.length === 0 ? <EmptyFilter showReset /> : (
+        <>
+          <div className='grid grid-cols-4 gap-6'>
+            {data.results.map((auction) => (
+              <AuctionCard auction={auction} key={auction.id} />
+            ))}
+          </div>
+          <div className='flex justify-center mt-5'>
+            <AppPagination
+              currentPage={params.pageNumber}
+              pageCount={data.pageCount}
+              onPageChange={(page) => setParams({ pageNumber: page })} />
+          </div>
+        </>
+      )}
     </>
   )
 }
