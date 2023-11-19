@@ -1,29 +1,29 @@
+import { useParamsStore } from '@/hooks/useParamsStore';
 import { Button } from 'flowbite-react';
-import ButtonGroup from 'flowbite-react/lib/esm/components/Button/ButtonGroup';
 import React from 'react'
-
-type Props = {
-  pageSize: number;
-  onPageSizeChange: (pageSize: number) => void;
-}
 
 const pageSizeButtons = [4, 8, 12];
 
-export default function Filters({ pageSize, onPageSizeChange }: Props) {
+export default function Filters() {
+  const pageSize = useParamsStore(store => store.pageSize);
+  const setParams = useParamsStore(store => store.setParams);
+
   return (
     <div className='flex justify-between items-center mb-4'>
       <div>
         <span className='uppercase text-sm text-gray-500 mr-2'>Page Size</span>
-        <ButtonGroup>
+        <Button.Group>
           {pageSizeButtons.map((value, index) => (
             <Button
               key={index}
               color={`${pageSize === value ? 'red' : 'gray'}`}
-              onClick={() => onPageSizeChange(value)}>
+              onClick={() => setParams({pageSize: value})}
+              className='focus:ring-0'
+              >
               {value}
             </Button>
           ))}
-        </ButtonGroup>
+        </Button.Group>
       </div>
     </div>
   )
