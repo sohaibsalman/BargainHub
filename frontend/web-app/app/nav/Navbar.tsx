@@ -13,7 +13,7 @@ export default async function Navbar() {
     <header className="sticky z-50 flex justify-between bg-white py-2 px-5 items-center text-gray-800 shadow-md">
       <Logo />
       <Search />
-      {user ? <UserActions /> : <LoginButton />}
+      {user ? <UserActions user={user} /> : <LoginButton />}
     </header>
   );
 }

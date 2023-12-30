@@ -14,7 +14,21 @@ export const authOption: NextAuthOptions = {
       authorization: { params: {scope: 'openid profile auctionApp'} },
       idToken: true
     })
-  ]
+  ],
+  callbacks: {
+    async jwt({token, profile}) {
+      if (profile) {
+        token.username = profile.username;
+      }
+      return token;
+    },
+    async session({session, token}) {
+      if (session) {
+        session.user.username = token.username;
+      }
+      return session;
+    }
+  }
 }
 
 const handler = NextAuth(authOption);
